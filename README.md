@@ -41,9 +41,9 @@ Crea un nuevo cliente con los datos proporcionados. Verifica que el número de t
     "edad": 30
   }
 ```
-Respuesta exitosa (201):
+- **Respuesta exitosa (201):**
+```
 json
-Copiar código
 {
   "id": 1,
   "nombre": "Juan",
@@ -51,3 +51,4 @@ Copiar código
   "edad": 30,
   "teléfono": 1234567890
 }
+```
