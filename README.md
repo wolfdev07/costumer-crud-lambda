@@ -101,12 +101,3 @@ Las contribuciones son bienvenidas. Por favor, crea un *issue* antes de enviar u
 ## Licencia
 
 Este proyecto está bajo la licencia [GPL-3.0](LICENSE).
-
-**GET** `/costumers/{phone}`
-
-Obtiene la información del cliente asociado al número de teléfono proporcionado.
-
-- **Parámetros:**
-  - `phone`: Número de teléfono del cliente.
-
-### 2. **Listar Cliente por Teléfono**
