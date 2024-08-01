@@ -40,10 +40,9 @@ Crea un nuevo cliente con los datos proporcionados. Verifica que el número de t
     "telefono": 1234567890,
     "edad": 30
   }
-```
+
 - **Respuesta exitosa (201):**
-```
-json
+```json
 {
   "id": 1,
   "nombre": "Juan",
@@ -51,4 +50,3 @@ json
   "edad": 30,
   "teléfono": 1234567890
 }
-```
