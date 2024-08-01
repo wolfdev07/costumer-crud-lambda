@@ -22,6 +22,7 @@ class CostumerBase(BaseModel):
     telefono: int
     edad: int = Field(..., ge=18, le=100)
 
+# AGREGAR VALIDACION PARA DUCPLICADOS
     @validator('telefono')
     def validate_telefono(cls, v):
         # Verificar que el número de teléfono tenga exactamente 10 dígitos
@@ -85,14 +86,43 @@ async def create_costumer(costumer: CostumerBase, db: db_dependency):
         "teléfono": new_phone.phone
     }
 
+# LISTAR TODOS LOS CLIENTES
+@app.get("/costumers/{phone}", status_code=status.HTTP_200_OK)
+async def get_costumers(phone: int, db: db_dependency):
+    instance = db.query(models.Phones).filter(models.Phones.phone == str(phone)).first()
+    costumers =db.query(models.Costumer).filter(models.Costumer.id == instance.costumer_id).first()
+    return {
+        "id": costumers.id,
+        "nombre": costumers.name,
+        "apellido": costumers.last_name,
+        "edad": costumers.age,
+        "teléfono": instance.phone
+    }
 
-@app.get("/costumers", status_code=status.HTTP_200_OK)
-async def get_costumers(db: db_dependency):
-    costumers =db.query(models.Costumer).all()
-    response = []
-    for costumer in costumers:
-        print(costumer)
-        phone = db.query(models.Phones).filter(models.Phones.costumer_id == costumer.id).first()
-        print(phone.phone)
-        response.append(costumer)
-    return response
+@app.put("/costumers/{phone}", status_code=status.HTTP_202_ACCEPTED)
+async def update_costumer(phone: int, costumer: CostumerBase, db: db_dependency):
+    # ACTUALIZAR EL USUARIO
+    instance = db.query(models.Phones).filter(models.Phones.phone == str(phone)).first()
+    costumers =db.query(models.Costumer).filter(models.Costumer.id == instance.costumer_id).first()
+
+
+@app.delete("/costumers/{phone}", status_code=status.HTTP_200_OK)
+async def delete_costumer(phone: int, db: db_dependency):
+    # ELIMINAR EL USUARIO
+    instance = db.query(models.Phones).filter(models.Phones.phone == str(phone)).first()
+    
+    if instance is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Record not found")
+    
+    costumers =db.query(models.Costumer).filter(models.Costumer.id == instance.costumer_id).first()
+    db.delete(costumers)
+    db.delete(instance)
+    db.commit()
+    return {
+            "msg" : "Record deleted successfully.", 
+            "id": costumers.id,
+            "name": costumers.name,
+            "last_name": costumers.last_name,
+            "age": costumers.age,
+            "phone": int(instance.phone)
+            }
