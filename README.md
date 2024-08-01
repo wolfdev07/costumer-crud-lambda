@@ -92,6 +92,9 @@ Este proyecto está configurado para ejecutarse en AWS Lambda utilizando `Mangum
 
 1. Crea una función Lambda en AWS.
 2. Sube el código y las dependencias empaquetadas como un archivo ZIP.
+    `pip3 install -t dependencies -r requirements.txt`
+    `(cd dependencies; zip ../aws_lambda_artifact.zip -r .)`
+    `zip aws_lambda_artifact.zip -u main.py`
 3. Configura el API Gateway para exponer los endpoints.
 
 ## Contribuciones
