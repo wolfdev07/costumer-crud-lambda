@@ -6,7 +6,7 @@ from sqlalchemy.ext.declarative import declarative_base
 
 load_dotenv()
 
-URL_DATABASE = os.getenv("URL_DATABASE")
+URL_DATABASE = os.getenv("URL_DATABASE_OPS")
 
 engine = create_engine(URL_DATABASE)
 SessionLambda = sessionmaker(autocommit=False, autoflush=False, bind=engine)

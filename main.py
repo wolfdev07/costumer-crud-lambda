@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException, Depends, status
+from mangum import Mangum
 from pydantic import BaseModel, Field, validator
 from typing import Annotated
 from sqlalchemy.orm import Session
@@ -7,6 +8,7 @@ from connection import SessionLambda, engine
 
 
 app = FastAPI()
+handler = Mangum(app)
 models.Base.metadata.create_all(bind=engine)
 
 
@@ -51,8 +53,15 @@ def __get_db__():
 
 db_dependency = Annotated[Session, Depends(__get_db__)]
 
-
 # ROUTES
+@app.get("/", status_code=status.HTTP_200_OK)
+async def index():
+    return {
+            "info": "Welcome to the API, read the documentation for more details",
+            "link": "https://github.com/wolfdev07/costumer-crud-lambda"
+            }
+
+# CREAR CLIENTE
 @app.post("/costumers", status_code=status.HTTP_201_CREATED)
 async def create_costumer(costumer: CostumerBase, db: db_dependency):
     # Extraer y limpiar datos del JSON
