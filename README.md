@@ -100,7 +100,7 @@ Las contribuciones son bienvenidas. Por favor, crea un *issue* antes de enviar u
 
 ## Licencia
 
-Este proyecto está bajo la licencia [MIT](LICENSE).
+Este proyecto está bajo la licencia [GPL-3.0](LICENSE).
 
 **GET** `/costumers/{phone}`
 
