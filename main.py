@@ -127,6 +127,11 @@ async def update_costumer(phone: int, costumer: CostumerBase, db: db_dependency)
     phone_dict = costumer.dict_for_phone
     costumer =db.query(models.Costumer).filter(models.Costumer.id == instance.costumer_id).first()
     
+    # VERIFICAR QUE EL TELEFONO NO EXISTA
+    phone_request = db.query(models.Phones).filter(models.Phones.phone == phone_dict["phone"]).first()
+    if costumer.id != phone_request.costumer_id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="The phone number is already registered with other costumer")
+
     costumer.name = costumer_dict["name"]
     costumer.last_name = costumer_dict["last_name"]
     costumer.age = costumer_dict["age"]
