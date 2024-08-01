@@ -1,7 +1,7 @@
 from sqlalchemy import String, Integer, Column, CheckConstraint
 from connection import Base
 
-# TABLA DE CLIENTES CON DATOS PERSONALES
+# TABLE OF CUSTOMERS WITH PERSONAL DATA
 class Costumer(Base):
     __tablename__ = "costumers"
 
@@ -10,7 +10,7 @@ class Costumer(Base):
     last_name = Column(String(50))
     age = Column(Integer, CheckConstraint('age >= 18 AND age <= 100', name='age_between_18_and_100'))
 
-# TABLA DE CLIENTES PARA TELÉFONOS
+# TABLE OF CLIENTS FOR PHONES
 class Phones(Base):
     __tablename__ = "phones"
 
