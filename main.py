@@ -62,6 +62,10 @@ async def create_costumer(costumer: CostumerBase, db: db_dependency):
     costumer_dict = costumer.dict_for_costumer
     phone_dict = costumer.dict_for_phone
 
+    instance = db.query(models.Phones).filter(models.Phones.phone == phone_dict["phone"]).first()
+    if instance is not None:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="The phone number is already registered")
+    
     # Crear el nuevo cliente
     new_costumer = models.Costumer(**costumer_dict)
     db.add(new_costumer)
@@ -71,39 +75,62 @@ async def create_costumer(costumer: CostumerBase, db: db_dependency):
     # Guardar el teléfono
     phone_dict["costumer_id"] = new_costumer.id
     new_phone = models.Phones(**phone_dict)
-    try:
-        db.add(new_phone)
-        db.commit()
-    except IntegrityError:
-        db.rollback()
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="The phone number is already registered")
+    db.add(new_phone)
+    db.commit()
 
     return {
         "id": new_costumer.id,
         "nombre": new_costumer.name,
         "apellido": new_costumer.last_name,
         "edad": new_costumer.age,
-        "teléfono": new_phone.phone
+        "teléfono": int(new_phone.phone)
     }
 
 # LISTAR TODOS LOS CLIENTES
 @app.get("/costumers/{phone}", status_code=status.HTTP_200_OK)
 async def get_costumers(phone: int, db: db_dependency):
+    # BUSCAR EL USUARIO
     instance = db.query(models.Phones).filter(models.Phones.phone == str(phone)).first()
+
+    if instance is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Record not found")
+
     costumers =db.query(models.Costumer).filter(models.Costumer.id == instance.costumer_id).first()
     return {
         "id": costumers.id,
         "nombre": costumers.name,
         "apellido": costumers.last_name,
         "edad": costumers.age,
-        "teléfono": instance.phone
+        "teléfono": int(instance.phone)
     }
 
 @app.put("/costumers/{phone}", status_code=status.HTTP_202_ACCEPTED)
 async def update_costumer(phone: int, costumer: CostumerBase, db: db_dependency):
     # ACTUALIZAR EL USUARIO
     instance = db.query(models.Phones).filter(models.Phones.phone == str(phone)).first()
-    costumers =db.query(models.Costumer).filter(models.Costumer.id == instance.costumer_id).first()
+    
+    if instance is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Record not found")
+    
+    costumer_dict = costumer.dict_for_costumer
+    phone_dict = costumer.dict_for_phone
+    costumer =db.query(models.Costumer).filter(models.Costumer.id == instance.costumer_id).first()
+    
+    costumer.name = costumer_dict["name"]
+    costumer.last_name = costumer_dict["last_name"]
+    costumer.age = costumer_dict["age"]
+    instance.phone = phone_dict["phone"]
+    db.commit()
+
+    return {
+            "msg": "Record updated successfully",
+            "name": costumer.name,
+            "last_name": costumer.last_name,
+            "age": costumer.age,
+            "phone": int(instance.phone)
+            }
+
+
 
 
 @app.delete("/costumers/{phone}", status_code=status.HTTP_200_OK)
