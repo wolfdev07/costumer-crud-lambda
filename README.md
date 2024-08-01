@@ -41,16 +41,6 @@ Crea un nuevo cliente con los datos proporcionados. Verifica que el número de t
     "edad": 30
   }
 
-- **Respuesta exitosa (201):**
- ```json
-  {
-    "id": 1,
-    "nombre": "Juan",
-    "apellido": "Pérez",
-    "edad": 30,
-    "teléfono": 1234567890
-  }
-
 ### 2. **Listar Cliente por Teléfono**
 
 **GET** `/costumers/{phone}`
@@ -61,11 +51,62 @@ Obtiene la información del cliente asociado al número de teléfono proporciona
   - `phone`: Número de teléfono del cliente.
 
 - **Respuesta exitosa (200):**
-  ```json
-  {
-    "id": 1,
-    "nombre": "Juan",
-    "apellido": "Pérez",
-    "edad": 30,
-    "teléfono": 1234567890
-  }
+  - `id`, `nombre`, `apellido`, `edad`, `teléfono`
+
+### 3. **Actualizar Cliente**
+
+**PUT** `/costumers/{phone}`
+
+Actualiza la información de un cliente existente utilizando su número de teléfono.
+
+- **Cuerpo de la solicitud:**
+  - `nombreCliente` (nombre y apellido), `telefono`, `edad`
+
+- **Respuesta exitosa (202):**
+  - `msg`, `name`, `last_name`, `age`, `phone`
+
+### 4. **Eliminar Cliente**
+
+**DELETE** `/costumers/{phone}`
+
+Elimina un cliente de la base de datos utilizando su número de teléfono.
+
+- **Parámetros:**
+  - `phone`: Número de teléfono del cliente.
+
+- **Respuesta exitosa (200):**
+  - `msg`, `id`, `name`, `last_name`, `age`, `phone`
+
+## Ejecución Local
+
+Para ejecutar este proyecto localmente:
+
+1. Clona este repositorio.
+2. Instala las dependencias necesarias utilizando `pip install -r requirements.txt`.
+3. Configura la base de datos y crea las tablas necesarias.
+4. Ejecuta la aplicación con `uvicorn main:app --reload`.
+
+## Despliegue en AWS Lambda
+
+Este proyecto está configurado para ejecutarse en AWS Lambda utilizando `Mangum` como adaptador. Para desplegar:
+
+1. Crea una función Lambda en AWS.
+2. Sube el código y las dependencias empaquetadas como un archivo ZIP.
+3. Configura el API Gateway para exponer los endpoints.
+
+## Contribuciones
+
+Las contribuciones son bienvenidas. Por favor, crea un *issue* antes de enviar un *pull request*.
+
+## Licencia
+
+Este proyecto está bajo la licencia [MIT](LICENSE).
+
+**GET** `/costumers/{phone}`
+
+Obtiene la información del cliente asociado al número de teléfono proporcionado.
+
+- **Parámetros:**
+  - `phone`: Número de teléfono del cliente.
+
+### 2. **Listar Cliente por Teléfono**
