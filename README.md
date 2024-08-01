@@ -42,11 +42,30 @@ Crea un nuevo cliente con los datos proporcionados. Verifica que el número de t
   }
 
 - **Respuesta exitosa (201):**
-```json
-{
-  "id": 1,
-  "nombre": "Juan",
-  "apellido": "Pérez",
-  "edad": 30,
-  "teléfono": 1234567890
-}
+ ```json
+  {
+    "id": 1,
+    "nombre": "Juan",
+    "apellido": "Pérez",
+    "edad": 30,
+    "teléfono": 1234567890
+  }
+
+### 2. **Listar Cliente por Teléfono**
+
+**GET** `/costumers/{phone}`
+
+Obtiene la información del cliente asociado al número de teléfono proporcionado.
+
+- **Parámetros:**
+  - `phone`: Número de teléfono del cliente.
+
+- **Respuesta exitosa (200):**
+  ```json
+  {
+    "id": 1,
+    "nombre": "Juan",
+    "apellido": "Pérez",
+    "edad": 30,
+    "teléfono": 1234567890
+  }
